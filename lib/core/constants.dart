@@ -120,6 +120,6 @@ const List<int> refreshIntervalOptionsMinutes = [15, 30, 60, 120, 180];
 class AppInfo {
   AppInfo._();
 
-  static const String buildLabel = 'Build 2026-08-24.4';
-  static const String buildNote = 'Added Russian / English / Hebrew localization';
+  static const String buildLabel = 'Build 2026-08-24.5';
+  static const String buildNote = 'Added hourly tide chart, widget layout fix';
 }

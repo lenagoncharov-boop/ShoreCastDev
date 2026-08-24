@@ -292,6 +292,12 @@ abstract class AppLocalizations {
   /// **'Wind speed'**
   String get windSpeedChartTitle;
 
+  /// No description provided for @tideLevelChartTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tide'**
+  String get tideLevelChartTitle;
+
   /// No description provided for @waveShort.
   ///
   /// In en, this message translates to:

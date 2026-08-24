@@ -39,6 +39,7 @@
 
   "waveHeightChartTitle": "Высота волны",
   "windSpeedChartTitle": "Скорость ветра",
+  "tideLevelChartTitle": "Прилив",
   "waveShort": "волна",
 
   "sunrise": "Восход",

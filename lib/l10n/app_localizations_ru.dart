@@ -119,6 +119,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get windSpeedChartTitle => 'Скорость ветра';
 
   @override
+  String get tideLevelChartTitle => 'Прилив';
+
+  @override
   String get waveShort => 'волна';
 
   @override

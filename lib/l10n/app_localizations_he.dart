@@ -119,6 +119,9 @@ class AppLocalizationsHe extends AppLocalizations {
   String get windSpeedChartTitle => 'מהירות רוח';
 
   @override
+  String get tideLevelChartTitle => 'גאות ושפל';
+
+  @override
   String get waveShort => 'גל';
 
   @override
