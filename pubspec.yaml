@@ -1,0 +1,58 @@
+name: shorecast
+description: "ShoreCast — sea & surf conditions for inshore spinning anglers."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+
+  # State management
+  flutter_riverpod: ^2.5.1
+
+  # Networking
+  http: ^1.2.1
+
+  # Charts
+  fl_chart: ^0.68.0
+
+  # Formatting
+  intl: ^0.19.0
+
+  # Local persistence (settings, saved locations, cached data)
+  shared_preferences: ^2.2.3
+
+  # Device GPS location (optional "use my location")
+  geolocator: ^12.0.0
+
+  # Android home-screen widget bridge
+  home_widget: ^0.7.0
+
+  # Periodic background refresh (widget auto-update)
+  workmanager: ^0.10.9
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+  # Generates mipmap / adaptive launcher icons for Android from the source artwork
+  flutter_launcher_icons: ^0.13.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icon/
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "assets/icon/app_icon_background.png"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+  min_sdk_android: 21

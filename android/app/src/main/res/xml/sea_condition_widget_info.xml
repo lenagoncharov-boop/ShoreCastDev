@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copy to: android/app/src/main/res/xml/sea_condition_widget_info.xml
+
+  updatePeriodMillis is Android's own OS-level fallback refresh (the
+  platform enforces a practical floor around 30 min and may batch it
+  regardless of the value set here) — the precise, user-configurable
+  refresh interval from Settings is actually driven by the WorkManager
+  periodic task registered in BackgroundRefreshService, not by this
+  value. Keep both: this one guarantees at least occasional refreshes
+  even if WorkManager is ever killed by an aggressive OEM battery
+  optimizer.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="180dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="3"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/sea_condition_widget"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:previewLayout="@layout/sea_condition_widget" />

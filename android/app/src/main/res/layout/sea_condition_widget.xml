@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copy to: android/app/src/main/res/layout/sea_condition_widget.xml
+  Simple RemoteViews layout — home-screen widgets only support a limited
+  subset of Views/ViewGroups, so this intentionally avoids anything fancy.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/widget_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/widget_location"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#F3F8FF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:text="ShoreCast" />
+
+        <ImageButton
+            android:id="@+id/widget_refresh_button"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="Refresh"
+            android:src="@android:drawable/ic_popup_sync" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/widget_wave_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="#F3F8FF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:text="-- m" />
+
+    <TextView
+        android:id="@+id/widget_wave_period"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#A9C0E0"
+        android:textSize="11sp"
+        android:text="period --s" />
+
+    <TextView
+        android:id="@+id/widget_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="#34D3F0"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:text="--" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/widget_wind"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#F3F8FF"
+            android:textSize="11sp"
+            android:text="Wind --" />
+
+        <TextView
+            android:id="@+id/widget_tide"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#F3F8FF"
+            android:textSize="11sp"
+            android:text="Tide --" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/widget_temp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#F3F8FF"
+            android:textSize="11sp"
+            android:text="Air --" />
+
+        <TextView
+            android:id="@+id/widget_water_temp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="#F3F8FF"
+            android:textSize="11sp"
+            android:text="Water --" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/widget_updated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="#6E88AE"
+        android:textSize="9sp"
+        android:text="Updated --" />
+
+</LinearLayout>
