@@ -1,15 +1,22 @@
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import '../core/constants.dart';
+import '../core/utils/compass_utils.dart';
 import '../core/utils/unit_converter.dart';
 import '../models/app_settings.dart';
 import '../models/daily_forecast.dart';
-import '../models/sea_condition_point.dart';
 import '../models/location_model.dart';
+import '../models/sea_condition_point.dart';
 
 /// Bridges the freshest sea-condition data into the native Android
 /// home-screen widget (see android_widget_integration/ for the Kotlin
-/// AppWidgetProvider that reads these keys).
+/// side: SeaConditionWidgetProvider renders it, WidgetConfigureActivity
+/// lets the user pick which metric is the headline).
+///
+/// All display formatting (icons/emoji, units, labels) happens here in
+/// Dart. Every metric gets three flavors pushed: a bare *value* (for when
+/// it's the chosen headline), an icon-prefixed *line* (for the small
+/// info grid), and a *subtitle* (caption under the headline number).
 class WidgetService {
   static Future<void> pushUpdate({
     required CoastLocation location,
@@ -28,34 +35,75 @@ class WidgetService {
     final idx = today.hourly.indexOf(point);
     final trend = today.hourlyTideTrend.isNotEmpty && idx < today.hourlyTideTrend.length
         ? today.hourlyTideTrend[idx]
-        : null;
+        : TideTrend.slack;
 
     final metric = settings.useMetricUnits;
+    final rating = point.rating;
 
-    await HomeWidget.saveWidgetData<String>(WidgetConstants.keyLocationName, location.displayName);
+    final String ratingBucket;
+    if (rating.score >= 4) {
+      ratingBucket = 'good';
+    } else if (rating.score >= 2.5) {
+      ratingBucket = 'fair';
+    } else {
+      ratingBucket = 'poor';
+    }
+
+    final String tideArrow;
+    switch (trend) {
+      case TideTrend.rising:
+        tideArrow = '⬆️';
+        break;
+      case TideTrend.falling:
+        tideArrow = '⬇️';
+        break;
+      case TideTrend.slack:
+        tideArrow = '➡️';
+        break;
+    }
+
+    final waveHeight = UnitConverter.formatHeight(point.waveHeight, metric: metric);
+    final windSpeed = UnitConverter.formatWindSpeed(point.windSpeed, metric: metric);
+    final windGusts = UnitConverter.formatWindSpeed(point.windGusts, metric: metric);
+    final airTemp = UnitConverter.formatTemp(point.airTemp, metric: metric);
+    final waterTemp = UnitConverter.formatTemp(point.seaSurfaceTemp, metric: metric);
+    final windDir = CompassUtils.labelFor(point.windDirection);
+    final swellDir = CompassUtils.labelFor(point.swellDirection);
+
     await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyWaveHeight, UnitConverter.formatHeight(point.waveHeight, metric: metric));
+        WidgetConstants.keyLocationLine, '📍 ${location.displayName}');
+    await HomeWidget.saveWidgetData<String>(WidgetConstants.keyRatingLabel, rating.label);
+    await HomeWidget.saveWidgetData<String>(WidgetConstants.keyRatingBucket, ratingBucket);
     await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyWavePeriod, UnitConverter.formatPeriod(point.wavePeriod));
-    await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keySwellDirection, point.swellDirection.toStringAsFixed(0));
-    await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyWindSpeed, UnitConverter.formatWindSpeed(point.windSpeed, metric: metric));
-    await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyWindDirection, point.windDirection.toStringAsFixed(0));
-    await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyAirTemp, UnitConverter.formatTemp(point.airTemp, metric: metric));
-    await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyWaterTemp, UnitConverter.formatTemp(point.seaSurfaceTemp, metric: metric));
-    await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyTideTrend, trend?.label ?? '--');
-    await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyRatingLabel, point.rating.label);
-    await HomeWidget.saveWidgetData<double>(
-        WidgetConstants.keyRatingScore, point.rating.score);
-    await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyUpdatedAt, DateFormat('HH:mm').format(now));
+        WidgetConstants.keyUpdatedLine, 'Updated ${DateFormat('HH:mm').format(now)}');
     await HomeWidget.saveWidgetData<bool>(WidgetConstants.keyUnits, metric);
+
+    Future<void> pushMetric(String id, String value, String line, String subtitle) async {
+      await HomeWidget.saveWidgetData<String>(WidgetConstants.keyMetricValue(id), value);
+      await HomeWidget.saveWidgetData<String>(WidgetConstants.keyMetricLine(id), line);
+      await HomeWidget.saveWidgetData<String>(WidgetConstants.keyMetricSubtitle(id), subtitle);
+    }
+
+    await pushMetric(
+      'wave',
+      waveHeight,
+      '🌊 $waveHeight',
+      '${UnitConverter.formatPeriod(point.swellPeriod)} period swell · $swellDir',
+    );
+    await pushMetric(
+      'wind',
+      windSpeed,
+      '💨 $windSpeed $windDir',
+      '$windDir · gusts $windGusts',
+    );
+    await pushMetric(
+      'tide',
+      trend.label,
+      '$tideArrow ${trend.label}',
+      'Sea-level trend (estimate)',
+    );
+    await pushMetric('air', airTemp, '🌡️ $airTemp', 'Air temperature');
+    await pushMetric('water', waterTemp, '💧 $waterTemp', 'Water temperature');
 
     await HomeWidget.updateWidget(
       androidName: WidgetConstants.androidWidgetName,

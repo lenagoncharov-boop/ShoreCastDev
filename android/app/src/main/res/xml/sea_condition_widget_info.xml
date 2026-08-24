@@ -13,11 +13,12 @@
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="250dp"
-    android:minHeight="180dp"
+    android:minHeight="200dp"
     android:targetCellWidth="4"
     android:targetCellHeight="3"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/sea_condition_widget"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
-    android:previewLayout="@layout/sea_condition_widget" />
+    android:previewLayout="@layout/sea_condition_widget"
+    android:configure="com.shorecast.shorecast_app.WidgetConfigureActivity" />

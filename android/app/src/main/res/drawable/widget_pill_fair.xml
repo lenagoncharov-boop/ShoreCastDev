@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copy to: android/app/src/main/res/drawable/widget_pill_fair.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <corners android:radius="20dp" />
+    <solid android:color="#40E0C93A" />
+    <stroke android:width="1dp" android:color="#E0C93A" />
+</shape>

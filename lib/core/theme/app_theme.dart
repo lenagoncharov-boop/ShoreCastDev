@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 
-/// Surfline-inspired dark ocean theme: deep navy backgrounds, bright cyan
-/// accent, glassy cards. Matches the app's launcher icon palette.
+/// Vivid ocean-blue theme lifted straight from the app's launcher icon:
+/// a bright, energetic azure background (not a dark/gloomy navy) with
+/// richer medium-blue cards floating on top, same layered look as the
+/// icon's weather panel over the sunset-sea photo.
 class AppColors {
   AppColors._();
 
-  static const Color deepNavy = Color(0xFF071A33);
-  static const Color oceanNavy = Color(0xFF0B2545);
-  static const Color panelNavy = Color(0xFF10305C);
-  static const Color panelNavyLight = Color(0xFF16407A);
-  static const Color accentCyan = Color(0xFF34D3F0);
-  static const Color accentBlue = Color(0xFF2E7BFA);
-  static const Color accentAmber = Color(0xFFFFB74D);
+  static const Color deepNavy = Color(0xFF01439A);
+  static const Color oceanNavy = Color(0xFF013B84);
+  static const Color panelNavy = Color(0xFF00458F);
+  static const Color panelNavyLight = Color(0xFF0072BE);
+  static const Color accentCyan = Color(0xFF3DD9F5);
+  static const Color accentBlue = Color(0xFF2E9BFA);
+  static const Color accentAmber = Color(0xFFFFCB4D);
   static const Color goodGreen = Color(0xFF4CD684);
   static const Color fairYellow = Color(0xFFE0C93A);
   static const Color poorRed = Color(0xFFEF6461);
   static const Color textPrimary = Color(0xFFF3F8FF);
-  static const Color textSecondary = Color(0xFFA9C0E0);
-  static const Color textFaint = Color(0xFF6E88AE);
-  static const Color divider = Color(0x33FFFFFF);
+  static const Color textSecondary = Color(0xFFB9DCF7);
+  static const Color textFaint = Color(0xFF89B4E0);
+  static const Color divider = Color(0x3DFFFFFF);
 
   static const LinearGradient heroGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFF0A2A52), Color(0xFF071A33)],
+    colors: [Color(0xFF0288E5), deepNavy],
   );
 
   static const LinearGradient cardGradient = LinearGradient(

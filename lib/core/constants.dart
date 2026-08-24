@@ -74,19 +74,30 @@ class WidgetConstants {
   // Keys written into the shared widget data store (read by the native
   // Kotlin AppWidgetProvider). Keep in sync with widget_service.dart and
   // the Kotlin provider in android_widget_integration/.
-  static const String keyLocationName = 'widget_location_name';
-  static const String keyWaveHeight = 'widget_wave_height';
-  static const String keyWavePeriod = 'widget_wave_period';
-  static const String keySwellDirection = 'widget_swell_direction';
-  static const String keyWindSpeed = 'widget_wind_speed';
-  static const String keyWindDirection = 'widget_wind_direction';
-  static const String keyAirTemp = 'widget_air_temp';
-  static const String keyWaterTemp = 'widget_water_temp';
-  static const String keyTideTrend = 'widget_tide_trend';
+  //
+  // All formatting (icons/emoji, units, labels) lives in Dart
+  // (widget_service.dart) — the Kotlin side stays a dumb "set this text"
+  // renderer that just picks which metric is the headline.
+  static const String keyLocationLine = 'widget_location_line';
   static const String keyRatingLabel = 'widget_rating_label';
-  static const String keyRatingScore = 'widget_rating_score';
-  static const String keyUpdatedAt = 'widget_updated_at';
+  static const String keyRatingBucket = 'widget_rating_bucket'; // "good" | "fair" | "poor"
+  static const String keyUpdatedLine = 'widget_updated_line';
   static const String keyUnits = 'widget_units_is_metric';
+
+  /// The five metrics a user can pick (via the widget's configuration
+  /// screen, WidgetConfigureActivity) as the big headline number. The
+  /// four NOT chosen fill the small info grid, in this order.
+  static const List<String> metricIds = ['wave', 'wind', 'tide', 'air', 'water'];
+
+  /// Bare value for the headline slot, e.g. "1.2 m", "Rising".
+  static String keyMetricValue(String id) => 'widget_metric_${id}_value';
+
+  /// Icon + value, e.g. "🌊 1.2 m" — used in the small info grid.
+  static String keyMetricLine(String id) => 'widget_metric_${id}_line';
+
+  /// One-line caption shown under the headline number when this metric
+  /// is selected, e.g. "6s period swell · NW".
+  static String keyMetricSubtitle(String id) => 'widget_metric_${id}_subtitle';
 }
 
 /// Default coast shown on first launch. Israel / Eastern Mediterranean

@@ -2,16 +2,25 @@
 <!--
   Copy to: android/app/src/main/res/layout/sea_condition_widget.xml
   Simple RemoteViews layout — home-screen widgets only support a limited
-  subset of Views/ViewGroups, so this intentionally avoids anything fancy.
+  subset of Views/ViewGroups, so this intentionally avoids anything fancy
+  (no plain <View> spacers, no paddingHorizontal/Vertical shorthand — both
+  are unsafe/unsupported below API 26, and minSdk here is 21).
+
+  widget_headline_value / widget_headline_subtitle and widget_slot_1..4 are
+  generic slots: SeaConditionWidgetProvider.buildRemoteViews() decides at
+  render time which metric goes in the big headline slot (per-widget
+  choice, see WidgetConfigureActivity) and fills the remaining four
+  metrics into the slots positionally.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp"
+    android:padding="14dp"
     android:background="@drawable/widget_background">
 
+    <!-- Header: location + settings (gear) + manual refresh -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,104 +33,139 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="#F3F8FF"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             android:maxLines="1"
             android:ellipsize="end"
-            android:text="ShoreCast" />
+            android:text="📍 ShoreCast" />
+
+        <ImageButton
+            android:id="@+id/widget_settings_button"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="8dp"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:contentDescription="Choose headline metric"
+            android:src="@android:drawable/ic_menu_preferences" />
 
         <ImageButton
             android:id="@+id/widget_refresh_button"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
             android:contentDescription="Refresh"
             android:src="@android:drawable/ic_popup_sync" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/widget_wave_height"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textColor="#F3F8FF"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:text="-- m" />
-
-    <TextView
-        android:id="@+id/widget_wave_period"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#A9C0E0"
-        android:textSize="11sp"
-        android:text="period --s" />
-
-    <TextView
-        android:id="@+id/widget_rating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:textColor="#34D3F0"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:text="--" />
-
+    <!-- Hero row: big headline number (user's chosen metric) + colored rating pill -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/widget_headline_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:text="-- m" />
+
+        <LinearLayout
+            android:id="@+id/widget_rating_pill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:background="@drawable/widget_pill_fair">
+
+            <TextView
+                android:id="@+id/widget_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:text="--" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/widget_headline_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textColor="#B9DCF7"
+        android:textSize="11sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:text="--" />
+
+    <!-- Metrics grid: whichever four metrics are NOT the chosen headline -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/widget_wind"
+            android:id="@+id/widget_slot_1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="#F3F8FF"
-            android:textSize="11sp"
-            android:text="Wind --" />
+            android:textSize="12sp"
+            android:text="💨 --" />
 
         <TextView
-            android:id="@+id/widget_tide"
+            android:id="@+id/widget_slot_2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="#F3F8FF"
-            android:textSize="11sp"
-            android:text="Tide --" />
+            android:textSize="12sp"
+            android:text="➡️ --" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/widget_temp"
+            android:id="@+id/widget_slot_3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="#F3F8FF"
-            android:textSize="11sp"
-            android:text="Air --" />
+            android:textSize="12sp"
+            android:text="🌡️ --" />
 
         <TextView
-            android:id="@+id/widget_water_temp"
+            android:id="@+id/widget_slot_4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textColor="#F3F8FF"
-            android:textSize="11sp"
-            android:text="Water --" />
+            android:textSize="12sp"
+            android:text="💧 --" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/widget_updated"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:textColor="#6E88AE"
+        android:layout_marginTop="10dp"
+        android:textColor="#89B4E0"
         android:textSize="9sp"
         android:text="Updated --" />
 
