@@ -21,7 +21,7 @@
         android:id="@+id/configure_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose your reading"
+        android:text="Widget: pick the main number"
         android:textColor="#FFF3F8FF"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:layout_marginBottom="22dp"
-        android:text="Pick which one shows as the big number on your widget. Your choice is saved instantly."
+        android:text="Your pick appears big on the home-screen widget. The other four still show underneath it, smaller."
         android:textColor="#FFB9DCF7"
         android:textSize="14sp" />
 
@@ -82,7 +82,7 @@
             android:paddingEnd="16dp"
             android:paddingTop="14dp"
             android:paddingBottom="14dp"
-            android:text="🌊  Tide trend"
+            android:text="🌙  Tide (rising / falling)"
             android:textColor="#FFF3F8FF"
             android:textSize="16sp"
             android:buttonTint="#3DD9F5" />

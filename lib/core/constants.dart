@@ -100,15 +100,15 @@ class WidgetConstants {
   static String keyMetricSubtitle(String id) => 'widget_metric_${id}_subtitle';
 }
 
-/// Default coast shown on first launch. Israel / Eastern Mediterranean
-/// (Herzliya) was chosen to match the app's configured timezone; change
+/// Default coast shown on first launch — "The Peak" in Haifa, Israel
+/// (a known surf spot near Bat Galim, coordinates via Surfline). Change
 /// any time via the location picker.
 class DefaultLocation {
   DefaultLocation._();
 
-  static const String name = 'Herzliya, Israel';
-  static const double lat = 32.1624;
-  static const double lon = 34.7936;
+  static const String name = 'Haifa - The Peak';
+  static const double lat = 32.807;
+  static const double lon = 34.955;
 }
 
 const List<int> refreshIntervalOptionsMinutes = [15, 30, 60, 120, 180];
