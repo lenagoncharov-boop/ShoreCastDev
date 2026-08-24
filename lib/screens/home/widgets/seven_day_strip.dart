@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/unit_converter.dart';
 import '../../../core/utils/weather_code.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/daily_forecast.dart';
 
 class SevenDayStrip extends StatelessWidget {
@@ -19,6 +20,7 @@ class SevenDayStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       height: 168,
       child: ListView.separated(
@@ -46,7 +48,7 @@ class SevenDayStrip extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    isToday ? 'Today' : DateFormat('EEE').format(day.date),
+                    isToday ? l10n.today : DateFormat('EEE').format(day.date),
                     style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
                   ),
                   Text(

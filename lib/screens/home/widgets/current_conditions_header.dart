@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/unit_converter.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/native_labels.dart';
 import '../../../models/location_model.dart';
 import '../../../models/sea_condition_point.dart';
 
@@ -22,6 +24,8 @@ class CurrentConditionsHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final rating = current.rating;
     final ratingColor = AppColors.ratingColor(rating.score);
+    final l10n = AppLocalizations.of(context)!;
+    final lang = Localizations.localeOf(context).languageCode;
 
     return Container(
       width: double.infinity,
@@ -66,7 +70,7 @@ class CurrentConditionsHeader extends StatelessWidget {
                       Icon(Icons.set_meal_rounded, size: 14, color: ratingColor),
                       const SizedBox(width: 4),
                       Text(
-                        '${rating.label} · ${rating.score.toStringAsFixed(1)}',
+                        '${ratingLabel(lang, rating.level)} · ${rating.score.toStringAsFixed(1)}',
                         style: TextStyle(
                           color: ratingColor,
                           fontWeight: FontWeight.w700,
@@ -81,8 +85,10 @@ class CurrentConditionsHeader extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            'Wave height · ${current.swellPeriod.toStringAsFixed(0)}s period swell from the '
-            '${_directionText(current.swellDirection)}',
+            l10n.waveHeightCaption(
+              current.swellPeriod.toStringAsFixed(0),
+              _directionText(current.swellDirection),
+            ),
             style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
           ),
         ],

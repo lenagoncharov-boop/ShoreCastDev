@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/unit_converter.dart';
 import '../../../core/utils/weather_code.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/daily_forecast.dart';
 import '../../../models/sea_condition_point.dart';
 import '../../../widgets/compass_gauge.dart';
@@ -85,7 +86,7 @@ class _HourColumn extends StatelessWidget {
             UnitConverter.formatHeight(point.waveHeight, metric: metricUnits),
             style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
           ),
-          Text('wave', style: const TextStyle(fontSize: 9, color: AppColors.textFaint)),
+          Text(AppLocalizations.of(context)!.waveShort, style: const TextStyle(fontSize: 9, color: AppColors.textFaint)),
           const SizedBox(height: 8),
           CompassGauge(directionDegrees: point.windDirection, size: 28, color: AppColors.accentBlue),
           const SizedBox(height: 4),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/location_model.dart';
 import '../../providers/locations_provider.dart';
 import '../../services/geocoding_service.dart';
@@ -56,13 +57,14 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _searchError = 'Search failed: $e';
+        _searchError = AppLocalizations.of(context)!.searchFailed('$e');
         _searching = false;
       });
     }
   }
 
   Future<void> _useMyLocation() async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       final permission = await Geolocator.checkPermission();
       var granted = permission;
@@ -72,7 +74,7 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
       if (granted == LocationPermission.denied || granted == LocationPermission.deniedForever) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Location permission denied.')),
+          SnackBar(content: Text(l10n.locationPermissionDenied)),
         );
         return;
       }
@@ -80,14 +82,14 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
       if (!serviceEnabled) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Location services are off.')),
+          SnackBar(content: Text(l10n.locationServicesOff)),
         );
         return;
       }
       final position = await Geolocator.getCurrentPosition();
       final loc = CoastLocation(
         id: CoastLocation.idFor(position.latitude, position.longitude),
-        name: 'My location',
+        name: l10n.myLocationName,
         lat: position.latitude,
         lon: position.longitude,
       );
@@ -95,18 +97,19 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Couldn\'t get location: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.couldntGetLocation('$e'))));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final locationsState = ref.watch(locationsProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return AppGradientBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(title: const Text('Choose a coast')),
+        appBar: AppBar(title: Text(l10n.chooseCoast)),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -118,7 +121,7 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
                   onChanged: _onQueryChanged,
                   style: const TextStyle(color: AppColors.textPrimary),
                   decoration: InputDecoration(
-                    hintText: 'Search a coastal town or beach…',
+                    hintText: l10n.searchHint,
                     hintStyle: const TextStyle(color: AppColors.textFaint),
                     prefixIcon: const Icon(Icons.search_rounded, color: AppColors.textFaint),
                     filled: true,
@@ -133,7 +136,7 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
                 OutlinedButton.icon(
                   onPressed: _useMyLocation,
                   icon: const Icon(Icons.my_location_rounded),
-                  label: const Text('Use my current location'),
+                  label: Text(l10n.useMyLocation),
                   style: OutlinedButton.styleFrom(
                     foregroundColor: AppColors.accentCyan,
                     side: const BorderSide(color: AppColors.accentCyan),
@@ -156,7 +159,7 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
                             child: Text(_searchError!, style: const TextStyle(color: AppColors.poorRed)),
                           ),
                         if (_results.isNotEmpty) ...[
-                          const _SectionLabel('Search results'),
+                          _SectionLabel(l10n.searchResults),
                           for (final loc in _results)
                             _LocationTile(
                               location: loc,
@@ -167,7 +170,7 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
                               },
                             ),
                         ],
-                        const _SectionLabel('Saved coasts'),
+                        _SectionLabel(l10n.savedCoasts),
                         for (final loc in state.saved)
                           _LocationTile(
                             location: loc,
@@ -180,7 +183,7 @@ class _LocationPickerScreenState extends ConsumerState<LocationPickerScreen> {
                                 ? () => ref.read(locationsProvider.notifier).removeLocation(loc.id)
                                 : null,
                           ),
-                        const _SectionLabel('Suggested coasts'),
+                        _SectionLabel(l10n.suggestedCoasts),
                         for (final loc in suggestedCoasts)
                           _LocationTile(
                             location: loc,
@@ -259,4 +262,3 @@ class _LocationTile extends StatelessWidget {
     );
   }
 }
-

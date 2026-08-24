@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 import '../../providers/settings_provider.dart';
 import '../../widgets/app_gradient_background.dart';
 
@@ -12,37 +13,68 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsProvider);
     final notifier = ref.read(settingsProvider.notifier);
+    final l10n = AppLocalizations.of(context)!;
 
     return AppGradientBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: AppBar(title: const Text('Settings')),
+        appBar: AppBar(title: Text(l10n.settingsTitle)),
         body: SafeArea(
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              const _SectionLabel('Units'),
+              _SectionLabel(l10n.unitsSection),
               _SettingsCard(
                 child: SwitchListTile(
                   value: settings.useMetricUnits,
                   onChanged: notifier.setMetric,
-                  title: const Text('Metric units'),
+                  title: Text(l10n.metricUnits),
                   subtitle: Text(
-                    settings.useMetricUnits
-                        ? 'Meters, km/h, °C'
-                        : 'Feet, knots, °F',
+                    settings.useMetricUnits ? l10n.unitsMetricSubtitle : l10n.unitsImperialSubtitle,
                     style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                   ),
                 ),
               ),
-              const _SectionLabel('Refresh'),
+              _SectionLabel(l10n.languageSection),
+              _SettingsCard(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6),
+                  child: Column(
+                    children: [
+                      _LanguageOption(
+                        title: l10n.languageSystem,
+                        subtitle: l10n.languageSystemSubtitle,
+                        selected: settings.languageCode == 'system',
+                        onTap: () => notifier.setLanguage('system'),
+                      ),
+                      _LanguageOption(
+                        title: 'Русский',
+                        selected: settings.languageCode == 'ru',
+                        onTap: () => notifier.setLanguage('ru'),
+                      ),
+                      _LanguageOption(
+                        title: 'English',
+                        selected: settings.languageCode == 'en',
+                        onTap: () => notifier.setLanguage('en'),
+                      ),
+                      _LanguageOption(
+                        title: 'עברית',
+                        selected: settings.languageCode == 'he',
+                        onTap: () => notifier.setLanguage('he'),
+                        isLast: true,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              _SectionLabel(l10n.refreshSection),
               _SettingsCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(16, 14, 16, 4),
-                      child: Text('Auto-refresh interval', style: TextStyle(fontWeight: FontWeight.w600)),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
+                      child: Text(l10n.autoRefreshInterval, style: const TextStyle(fontWeight: FontWeight.w600)),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -52,7 +84,7 @@ class SettingsScreen extends ConsumerWidget {
                         children: [
                           for (final minutes in refreshIntervalOptionsMinutes)
                             ChoiceChip(
-                              label: Text(minutes < 60 ? '$minutes min' : '${minutes ~/ 60} h'),
+                              label: Text(minutes < 60 ? l10n.minutesShort(minutes) : l10n.hoursShort(minutes ~/ 60)),
                               selected: settings.refreshIntervalMinutes == minutes,
                               onSelected: (_) => notifier.setRefreshInterval(minutes),
                               selectedColor: AppColors.accentCyan.withOpacity(0.25),
@@ -70,46 +102,40 @@ class SettingsScreen extends ConsumerWidget {
                     SwitchListTile(
                       value: settings.widgetAutoRefreshEnabled,
                       onChanged: notifier.setWidgetAutoRefresh,
-                      title: const Text('Auto-refresh home-screen widget'),
-                      subtitle: const Text(
-                        'Uses the interval above. You can always tap the widget\'s refresh icon manually.',
-                        style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+                      title: Text(l10n.widgetAutoRefresh),
+                      subtitle: Text(
+                        l10n.widgetAutoRefreshSubtitle,
+                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 12),
                       ),
                     ),
                   ],
                 ),
               ),
-              const _SectionLabel('About the data'),
+              _SectionLabel(l10n.aboutDataSection),
               _SettingsCard(
-                child: const Padding(
-                  padding: EdgeInsets.all(16),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'ShoreCast uses free, open weather and marine data:',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        l10n.aboutDataIntro,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
-                        '• Open-Meteo Marine Weather API — wave height, swell, wind waves, sea temperature\n'
-                        '• Open-Meteo Weather API — air temperature, wind, sunrise/sunset, UV, cloud cover\n'
-                        '• Open-Meteo Geocoding API — coastal location search\n'
-                        '• Moon phase is computed locally from an astronomical formula (no API call)',
-                        style: TextStyle(color: AppColors.textSecondary, fontSize: 13, height: 1.5),
+                        l10n.aboutDataSources,
+                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 13, height: 1.5),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Text(
-                        'Tide note',
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        l10n.tideNoteTitle,
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        'There is currently no free, key-less, worldwide source of real harmonic tide '
-                        'predictions. The tide trend shown (rising/falling) is derived from Open-Meteo\'s '
-                        'blended sea-level signal, which is a good qualitative guide but not a precise '
-                        'tide-table time or height — treat it as an estimate.',
-                        style: TextStyle(color: AppColors.textSecondary, fontSize: 13, height: 1.5),
+                        l10n.tideNoteBody,
+                        style: const TextStyle(color: AppColors.textSecondary, fontSize: 13, height: 1.5),
                       ),
                     ],
                   ),
@@ -162,6 +188,42 @@ class _SectionLabel extends StatelessWidget {
           color: AppColors.textFaint,
         ),
       ),
+    );
+  }
+}
+
+class _LanguageOption extends StatelessWidget {
+  final String title;
+  final String? subtitle;
+  final bool selected;
+  final VoidCallback onTap;
+  final bool isLast;
+
+  const _LanguageOption({
+    required this.title,
+    this.subtitle,
+    required this.selected,
+    required this.onTap,
+    this.isLast = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: onTap,
+          title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+          subtitle: subtitle == null
+              ? null
+              : Text(subtitle!, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+          trailing: Icon(
+            selected ? Icons.radio_button_checked_rounded : Icons.radio_button_unchecked_rounded,
+            color: selected ? AppColors.accentCyan : AppColors.textFaint,
+          ),
+        ),
+        if (!isLast) const Divider(height: 1, indent: 16, endIndent: 16, color: AppColors.divider),
+      ],
     );
   }
 }

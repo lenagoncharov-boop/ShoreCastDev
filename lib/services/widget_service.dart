@@ -1,12 +1,33 @@
+import 'dart:ui' show PlatformDispatcher;
 import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import '../core/constants.dart';
 import '../core/utils/compass_utils.dart';
 import '../core/utils/unit_converter.dart';
+import '../l10n/native_labels.dart';
 import '../models/app_settings.dart';
 import '../models/daily_forecast.dart';
 import '../models/location_model.dart';
 import '../models/sea_condition_point.dart';
+
+const _supportedWidgetLanguages = {'en', 'ru', 'he'};
+
+/// Resolves AppSettings.languageCode ('system' | 'en' | 'ru' | 'he') to a
+/// concrete language for the strings pushed to the native widget. This
+/// runs in a headless background isolate (WorkManager tick, or the
+/// widget's manual refresh tap) with no BuildContext, so 'system' is
+/// resolved from the engine's own platform locale instead of
+/// Localizations.localeOf(context). Falls back to English if that
+/// lookup fails or isn't one of our supported languages.
+String _resolveWidgetLanguage(String languageCode) {
+  if (languageCode != 'system') return languageCode;
+  try {
+    final systemLang = PlatformDispatcher.instance.locale.languageCode;
+    return _supportedWidgetLanguages.contains(systemLang) ? systemLang : 'en';
+  } catch (_) {
+    return 'en';
+  }
+}
 
 /// Bridges the freshest sea-condition data into the native Android
 /// home-screen widget (see android_widget_integration/ for the Kotlin
@@ -39,6 +60,7 @@ class WidgetService {
 
     final metric = settings.useMetricUnits;
     final rating = point.rating;
+    final lang = _resolveWidgetLanguage(settings.languageCode);
 
     final String ratingBucket;
     if (rating.score >= 4) {
@@ -69,13 +91,14 @@ class WidgetService {
     final waterTemp = UnitConverter.formatTemp(point.seaSurfaceTemp, metric: metric);
     final windDir = CompassUtils.labelFor(point.windDirection);
     final swellDir = CompassUtils.labelFor(point.swellDirection);
+    final trendLabel = tideTrendLabel(lang, trend);
 
     await HomeWidget.saveWidgetData<String>(
         WidgetConstants.keyLocationLine, '📍 ${location.displayName}');
-    await HomeWidget.saveWidgetData<String>(WidgetConstants.keyRatingLabel, rating.label);
+    await HomeWidget.saveWidgetData<String>(WidgetConstants.keyRatingLabel, ratingLabel(lang, rating.level));
     await HomeWidget.saveWidgetData<String>(WidgetConstants.keyRatingBucket, ratingBucket);
     await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyUpdatedLine, 'Updated ${DateFormat('HH:mm').format(now)}');
+        WidgetConstants.keyUpdatedLine, '${widgetUpdatedPrefix(lang)} ${DateFormat('HH:mm').format(now)}');
     await HomeWidget.saveWidgetData<bool>(WidgetConstants.keyUnits, metric);
 
     Future<void> pushMetric(String id, String value, String line, String subtitle) async {
@@ -88,22 +111,22 @@ class WidgetService {
       'wave',
       waveHeight,
       '🌊 $waveHeight',
-      '${UnitConverter.formatPeriod(point.swellPeriod)} period swell · $swellDir',
+      '${UnitConverter.formatPeriod(point.swellPeriod)} ${widgetPeriodSwellSuffix(lang)} · $swellDir',
     );
     await pushMetric(
       'wind',
       windSpeed,
       '💨 $windSpeed $windDir',
-      '$windDir · gusts $windGusts',
+      '$windDir · ${widgetGustsLabel(lang)} $windGusts',
     );
     await pushMetric(
       'tide',
-      trend.label,
-      '$tideArrow ${trend.label}',
-      'Sea-level trend (estimate)',
+      trendLabel,
+      '$tideArrow $trendLabel',
+      widgetSeaLevelTrendEstimateLabel(lang),
     );
-    await pushMetric('air', airTemp, '🌡️ $airTemp', 'Air temperature');
-    await pushMetric('water', waterTemp, '💧 $waterTemp', 'Water temperature');
+    await pushMetric('air', airTemp, '🌡️ $airTemp', widgetAirTemperatureLabel(lang));
+    await pushMetric('water', waterTemp, '💧 $waterTemp', widgetWaterTemperatureLabel(lang));
 
     await HomeWidget.updateWidget(
       androidName: WidgetConstants.androidWidgetName,

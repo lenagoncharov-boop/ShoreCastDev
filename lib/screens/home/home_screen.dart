@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme/app_theme.dart';
+import '../../l10n/app_localizations.dart';
 import '../../models/sea_condition_point.dart';
 import '../../providers/forecast_provider.dart';
 import '../../providers/locations_provider.dart';
@@ -66,6 +67,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final location = ref.watch(activeLocationProvider);
     final settings = ref.watch(settingsProvider);
     final forecastAsync = ref.watch(forecastProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return AppGradientBackground(
       child: Scaffold(
@@ -86,12 +88,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
           actions: [
             IconButton(
-              tooltip: 'Refresh now',
+              tooltip: l10n.refreshNowTooltip,
               icon: const Icon(Icons.refresh_rounded),
               onPressed: () => ref.invalidate(forecastProvider),
             ),
             IconButton(
-              tooltip: 'Settings',
+              tooltip: l10n.settingsTooltip,
               icon: const Icon(Icons.settings_rounded),
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const SettingsScreen()),
@@ -108,7 +110,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
             data: (days) {
               if (days.isEmpty) {
-                return const ErrorView(message: 'No forecast data returned.', onRetry: _noop);
+                return ErrorView(message: l10n.noForecastData, onRetry: _noop);
               }
               final today = days.first;
               final now = DateTime.now();
@@ -146,11 +148,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 Expanded(
                                   child: ConditionMetricCard(
                                     icon: Icons.waves_rounded,
-                                    label: 'Swell',
+                                    label: l10n.swellLabel,
                                     value:
                                         '${current.swellHeight.toStringAsFixed(1)} m @ ${current.swellPeriod.toStringAsFixed(0)}s',
-                                    subValue:
-                                        'Wind waves ${current.windWaveHeight.toStringAsFixed(1)} m',
+                                    subValue: l10n.windWavesSubvalue('${current.windWaveHeight.toStringAsFixed(1)} m'),
                                     accent: AppColors.accentCyan,
                                   ),
                                 ),
@@ -158,7 +159,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 Expanded(
                                   child: ConditionMetricCard(
                                     icon: Icons.air_rounded,
-                                    label: 'Wind',
+                                    label: l10n.windLabel,
                                     value:
                                         '${current.windSpeed.toStringAsFixed(0)} km/h · gusts ${current.windGusts.toStringAsFixed(0)}',
                                     accent: AppColors.accentBlue,
@@ -180,7 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 Expanded(
                                   child: ConditionMetricCard(
                                     icon: Icons.thermostat_rounded,
-                                    label: 'Air / Water temp',
+                                    label: l10n.airWaterTemp,
                                     value:
                                         '${current.airTemp.toStringAsFixed(0)}° / ${current.seaSurfaceTemp.toStringAsFixed(0)}°C',
                                     accent: AppColors.accentAmber,
@@ -190,10 +191,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 Expanded(
                                   child: ConditionMetricCard(
                                     icon: Icons.wb_sunny_outlined,
-                                    label: 'UV index',
+                                    label: l10n.uvIndexLabel,
                                     value: current.uvIndex.toStringAsFixed(1),
-                                    subValue:
-                                        'Cloud cover ${current.cloudCover.toStringAsFixed(0)}%',
+                                    subValue: l10n.cloudCoverSubvalue(current.cloudCover.toStringAsFixed(0)),
                                     accent: AppColors.accentAmber,
                                   ),
                                 ),
@@ -213,9 +213,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text('Hourly breakdown', style: TextStyle(fontWeight: FontWeight.w700)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(l10n.hourlyBreakdown, style: const TextStyle(fontWeight: FontWeight.w700)),
                     ),
                     const SizedBox(height: 10),
                     Padding(
@@ -223,9 +223,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       child: HourlyTable(day: today, metricUnits: settings.useMetricUnits),
                     ),
                     const SizedBox(height: 20),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text('7-day outlook', style: TextStyle(fontWeight: FontWeight.w700)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(l10n.sevenDayOutlook, style: const TextStyle(fontWeight: FontWeight.w700)),
                     ),
                     const SizedBox(height: 10),
                     Padding(

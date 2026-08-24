@@ -1,0 +1,69 @@
+{
+  "@@locale": "ru",
+
+  "settingsTitle": "Настройки",
+  "refreshNowTooltip": "Обновить",
+  "settingsTooltip": "Настройки",
+  "noForecastData": "Нет данных прогноза.",
+  "hourlyBreakdown": "Почасовой прогноз",
+  "sevenDayOutlook": "Прогноз на 7 дней",
+  "today": "Сегодня",
+
+  "swellLabel": "Зыбь",
+  "windLabel": "Ветер",
+  "windWavesSubvalue": "Ветровые волны {value}",
+  "airWaterTemp": "Темп. воздуха / воды",
+  "uvIndexLabel": "УФ-индекс",
+  "cloudCoverSubvalue": "Облачность {value}%",
+
+  "avgWaveMax": "Волна ср. {avg} · макс. {max}",
+  "bestWindow": "Лучшее время: {time} · {label} ({score})",
+
+  "chooseCoast": "Выбор побережья",
+  "searchHint": "Поиск города или пляжа на побережье…",
+  "useMyLocation": "Использовать моё местоположение",
+  "locationPermissionDenied": "Доступ к геопозиции запрещён.",
+  "locationServicesOff": "Службы геолокации выключены.",
+  "myLocationName": "Моё местоположение",
+  "couldntGetLocation": "Не удалось получить местоположение: {error}",
+  "searchFailed": "Ошибка поиска: {error}",
+  "searchResults": "Результаты поиска",
+  "savedCoasts": "Сохранённые места",
+  "suggestedCoasts": "Популярные места",
+
+  "couldntLoadConditions": "Не удалось загрузить данные об условиях",
+  "retry": "Повторить",
+  "fetchingConditions": "Загружаем данные об условиях…",
+
+  "waveHeightCaption": "Высота волны · зыбь с периодом {period} с со стороны {direction}",
+
+  "waveHeightChartTitle": "Высота волны",
+  "windSpeedChartTitle": "Скорость ветра",
+  "waveShort": "волна",
+
+  "sunrise": "Восход",
+  "sunset": "Закат",
+  "litPercent": "Освещено {percent}%",
+
+  "tideWithTrend": "Прилив · {trend}",
+  "tideCaption": "Приблизительный тренд по модели уровня моря, не таблица приливов",
+
+  "unitsSection": "Единицы измерения",
+  "metricUnits": "Метрическая система",
+  "unitsMetricSubtitle": "Метры, км/ч, °C",
+  "unitsImperialSubtitle": "Футы, узлы, °F",
+  "refreshSection": "Обновление",
+  "autoRefreshInterval": "Интервал автообновления",
+  "minutesShort": "{minutes} мин",
+  "hoursShort": "{hours} ч",
+  "widgetAutoRefresh": "Автообновление виджета на рабочем столе",
+  "widgetAutoRefreshSubtitle": "Используется интервал выше. Можно также обновить вручную — тапом по иконке обновления на виджете.",
+  "aboutDataSection": "Об источниках данных",
+  "aboutDataIntro": "ShoreCast использует бесплатные открытые данные о погоде и море:",
+  "aboutDataSources": "• Open-Meteo Marine Weather API — высота волн, зыбь, ветровые волны, температура воды\n• Open-Meteo Weather API — температура воздуха, ветер, восход/закат, УФ-индекс, облачность\n• Open-Meteo Geocoding API — поиск локаций на побережье\n• Фаза луны рассчитывается локально по астрономической формуле (без запросов к API)",
+  "tideNoteTitle": "О приливах",
+  "tideNoteBody": "Сейчас нет бесплатного источника точных таблиц приливов, доступного без API-ключа, по всему миру. Показанный тренд прилива (растёт/падает) рассчитан по смешанному сигналу уровня моря Open-Meteo — это хороший качественный ориентир, но не точное время или высота прилива. Воспринимайте это как оценку.",
+  "languageSection": "Язык",
+  "languageSystem": "Системный",
+  "languageSystemSubtitle": "Как в настройках телефона"
+}

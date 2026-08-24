@@ -6,11 +6,16 @@
 ///
 /// This is a heuristic, not a scientific model — documented as such in
 /// Settings > About.
+enum RatingLevel { excellent, good, fair, poor }
+
 class FishingRating {
   final double score; // 1.0 .. 5.0
-  final String label;
+  final String label; // English fallback only — for user-facing text use
+  // RatingLevel + ratingLabel() from lib/l10n/native_labels.dart instead,
+  // so it follows the app's selected language.
+  final RatingLevel level;
 
-  const FishingRating(this.score, this.label);
+  const FishingRating(this.score, this.label, this.level);
 
   static FishingRating compute({
     required double waveHeightM,
@@ -46,16 +51,21 @@ class FishingRating {
     score = score.clamp(1.0, 5.0);
 
     final String label;
+    final RatingLevel level;
     if (score >= 4.2) {
       label = 'Excellent';
+      level = RatingLevel.excellent;
     } else if (score >= 3.3) {
       label = 'Good';
+      level = RatingLevel.good;
     } else if (score >= 2.3) {
       label = 'Fair';
+      level = RatingLevel.fair;
     } else {
       label = 'Poor';
+      level = RatingLevel.poor;
     }
 
-    return FishingRating(double.parse(score.toStringAsFixed(1)), label);
+    return FishingRating(double.parse(score.toStringAsFixed(1)), label, level);
   }
 }

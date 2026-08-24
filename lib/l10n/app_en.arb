@@ -1,0 +1,112 @@
+{
+  "@@locale": "en",
+
+  "settingsTitle": "Settings",
+  "refreshNowTooltip": "Refresh now",
+  "settingsTooltip": "Settings",
+  "noForecastData": "No forecast data returned.",
+  "hourlyBreakdown": "Hourly breakdown",
+  "sevenDayOutlook": "7-day outlook",
+  "today": "Today",
+
+  "swellLabel": "Swell",
+  "windLabel": "Wind",
+  "windWavesSubvalue": "Wind waves {value}",
+  "@windWavesSubvalue": {
+    "placeholders": { "value": { "type": "String" } }
+  },
+  "airWaterTemp": "Air / Water temp",
+  "uvIndexLabel": "UV index",
+  "cloudCoverSubvalue": "Cloud cover {value}%",
+  "@cloudCoverSubvalue": {
+    "placeholders": { "value": { "type": "String" } }
+  },
+
+  "avgWaveMax": "Avg wave {avg} · max {max}",
+  "@avgWaveMax": {
+    "placeholders": {
+      "avg": { "type": "String" },
+      "max": { "type": "String" }
+    }
+  },
+  "bestWindow": "Best window: {time} · {label} ({score})",
+  "@bestWindow": {
+    "placeholders": {
+      "time": { "type": "String" },
+      "label": { "type": "String" },
+      "score": { "type": "String" }
+    }
+  },
+
+  "chooseCoast": "Choose a coast",
+  "searchHint": "Search a coastal town or beach…",
+  "useMyLocation": "Use my current location",
+  "locationPermissionDenied": "Location permission denied.",
+  "locationServicesOff": "Location services are off.",
+  "myLocationName": "My location",
+  "couldntGetLocation": "Couldn't get location: {error}",
+  "@couldntGetLocation": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "searchFailed": "Search failed: {error}",
+  "@searchFailed": {
+    "placeholders": { "error": { "type": "String" } }
+  },
+  "searchResults": "Search results",
+  "savedCoasts": "Saved coasts",
+  "suggestedCoasts": "Suggested coasts",
+
+  "couldntLoadConditions": "Couldn't load sea conditions",
+  "retry": "Retry",
+  "fetchingConditions": "Fetching sea conditions…",
+
+  "waveHeightCaption": "Wave height · {period}s period swell from the {direction}",
+  "@waveHeightCaption": {
+    "placeholders": {
+      "period": { "type": "String" },
+      "direction": { "type": "String" }
+    }
+  },
+
+  "waveHeightChartTitle": "Wave height",
+  "windSpeedChartTitle": "Wind speed",
+  "waveShort": "wave",
+
+  "sunrise": "Sunrise",
+  "sunset": "Sunset",
+  "litPercent": "{percent}% lit",
+  "@litPercent": {
+    "placeholders": { "percent": { "type": "String" } }
+  },
+
+  "tideWithTrend": "Tide · {trend}",
+  "@tideWithTrend": {
+    "placeholders": { "trend": { "type": "String" } }
+  },
+  "tideCaption": "Approx. trend from sea-level model, not a tide-table prediction",
+
+  "unitsSection": "Units",
+  "metricUnits": "Metric units",
+  "unitsMetricSubtitle": "Meters, km/h, °C",
+  "unitsImperialSubtitle": "Feet, knots, °F",
+  "refreshSection": "Refresh",
+  "autoRefreshInterval": "Auto-refresh interval",
+  "minutesShort": "{minutes} min",
+  "@minutesShort": {
+    "placeholders": { "minutes": { "type": "int" } }
+  },
+  "hoursShort": "{hours} h",
+  "@hoursShort": {
+    "placeholders": { "hours": { "type": "int" } }
+  },
+  "widgetAutoRefresh": "Auto-refresh home-screen widget",
+  "widgetAutoRefreshSubtitle": "Uses the interval above. You can always tap the widget's refresh icon manually.",
+  "aboutDataSection": "About the data",
+  "aboutDataIntro": "ShoreCast uses free, open weather and marine data:",
+  "aboutDataSources": "• Open-Meteo Marine Weather API — wave height, swell, wind waves, sea temperature\n• Open-Meteo Weather API — air temperature, wind, sunrise/sunset, UV, cloud cover\n• Open-Meteo Geocoding API — coastal location search\n• Moon phase is computed locally from an astronomical formula (no API call)",
+  "tideNoteTitle": "Tide note",
+  "tideNoteBody": "There is currently no free, key-less, worldwide source of real harmonic tide predictions. The tide trend shown (rising/falling) is derived from Open-Meteo's blended sea-level signal, which is a good qualitative guide but not a precise tide-table time or height — treat it as an estimate.",
+  "languageSection": "Language",
+  "languageSystem": "System",
+  "languageSystemSubtitle": "Follows your phone's language"
+}

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/native_labels.dart';
 import '../../../models/daily_forecast.dart';
 import '../../../models/sea_condition_point.dart';
 
@@ -17,6 +19,8 @@ class TideTrendCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final trends = day.hourlyTideTrend;
     final trend = currentHourIndex < trends.length ? trends[currentHourIndex] : TideTrend.slack;
+    final l10n = AppLocalizations.of(context)!;
+    final lang = Localizations.localeOf(context).languageCode;
 
     final IconData icon;
     final Color color;
@@ -54,12 +58,12 @@ class TideTrendCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Tide · ${trend.label}',
+                Text(l10n.tideWithTrend(tideTrendLabel(lang, trend)),
                     style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
                 const SizedBox(height: 2),
-                const Text(
-                  'Approx. trend from sea-level model, not a tide-table prediction',
-                  style: TextStyle(fontSize: 10.5, color: AppColors.textFaint),
+                Text(
+                  l10n.tideCaption,
+                  style: const TextStyle(fontSize: 10.5, color: AppColors.textFaint),
                 ),
               ],
             ),

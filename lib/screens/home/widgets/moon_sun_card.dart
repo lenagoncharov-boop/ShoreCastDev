@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../l10n/native_labels.dart';
 import '../../../models/daily_forecast.dart';
 import '../../../widgets/moon_phase_icon.dart';
 
@@ -13,6 +15,8 @@ class MoonSunCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final timeFmt = DateFormat('HH:mm');
     final moon = day.moonPhase;
+    final l10n = AppLocalizations.of(context)!;
+    final lang = Localizations.localeOf(context).languageCode;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -26,7 +30,7 @@ class MoonSunCard extends StatelessWidget {
           Expanded(
             child: _SunColumn(
               icon: Icons.wb_twilight_rounded,
-              label: 'Sunrise',
+              label: l10n.sunrise,
               time: timeFmt.format(day.sunrise),
             ),
           ),
@@ -34,7 +38,7 @@ class MoonSunCard extends StatelessWidget {
           Expanded(
             child: _SunColumn(
               icon: Icons.nights_stay_rounded,
-              label: 'Sunset',
+              label: l10n.sunset,
               time: timeFmt.format(day.sunset),
             ),
           ),
@@ -45,12 +49,12 @@ class MoonSunCard extends StatelessWidget {
                 MoonPhaseIcon(phase: moon, size: 32),
                 const SizedBox(height: 6),
                 Text(
-                  moon.label,
+                  moonPhaseLabel(lang, moon.phase),
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 11, color: AppColors.textSecondary),
                 ),
                 Text(
-                  '${(moon.illumination * 100).toStringAsFixed(0)}% lit',
+                  l10n.litPercent((moon.illumination * 100).toStringAsFixed(0)),
                   style: const TextStyle(fontSize: 10, color: AppColors.textFaint),
                 ),
               ],

@@ -29,6 +29,11 @@ class SettingsNotifier extends StateNotifier<AppSettings> {
     await SettingsService.save(state);
     await BackgroundRefreshService.apply(state);
   }
+
+  Future<void> setLanguage(String languageCode) async {
+    state = state.copyWith(languageCode: languageCode);
+    await SettingsService.save(state);
+  }
 }
 
 final settingsProvider = StateNotifierProvider<SettingsNotifier, AppSettings>(

@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/utils/unit_converter.dart';
 import '../../core/utils/weather_code.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/native_labels.dart';
 import '../../models/daily_forecast.dart';
 import '../../providers/settings_provider.dart';
 import '../../widgets/app_gradient_background.dart';
@@ -33,8 +35,11 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsProvider);
+    final l10n = AppLocalizations.of(context)!;
+    final lang = Localizations.localeOf(context).languageCode;
     final day = widget.days[_index];
-    final weatherInfo = WeatherCodeInfo.forCode(day.weatherCode);
+    final weatherLabelText = weatherLabel(lang, day.weatherCode);
+    final weatherIcon = WeatherCodeInfo.forCode(day.weatherCode).icon;
     final ratingColor = AppColors.ratingColor(day.dayRatingScore);
 
     return AppGradientBackground(
@@ -72,7 +77,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen> {
                 ),
                 child: Row(
                   children: [
-                    Icon(weatherInfo.icon, size: 34, color: AppColors.accentAmber),
+                    Icon(weatherIcon, size: 34, color: AppColors.accentAmber),
                     const SizedBox(width: 14),
                     Expanded(
                       child: Column(
@@ -83,12 +88,14 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen> {
                             '${UnitConverter.formatTemp(day.tempMax, metric: settings.useMetricUnits)}',
                             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
                           ),
-                          Text(weatherInfo.label,
+                          Text(weatherLabelText,
                               style: const TextStyle(fontSize: 12, color: AppColors.textSecondary)),
                           const SizedBox(height: 4),
                           Text(
-                            'Avg wave ${UnitConverter.formatHeight(day.avgWaveHeight, metric: settings.useMetricUnits)}'
-                            ' · max ${UnitConverter.formatHeight(day.maxWaveHeight, metric: settings.useMetricUnits)}',
+                            l10n.avgWaveMax(
+                              UnitConverter.formatHeight(day.avgWaveHeight, metric: settings.useMetricUnits),
+                              UnitConverter.formatHeight(day.maxWaveHeight, metric: settings.useMetricUnits),
+                            ),
                             style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                           ),
                         ],
@@ -126,8 +133,11 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Best window: ${DateFormat('HH:mm').format(day.bestHour!.time)} · '
-                          '${day.bestHour!.rating.label} (${day.bestHour!.rating.score.toStringAsFixed(1)})',
+                          l10n.bestWindow(
+                            DateFormat('HH:mm').format(day.bestHour!.time),
+                            ratingLabel(lang, day.bestHour!.rating.level),
+                            day.bestHour!.rating.score.toStringAsFixed(1),
+                          ),
                           style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
                         ),
                       ),
@@ -137,7 +147,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen> {
               const SizedBox(height: 16),
               HourlyChartSection(points: day.hourly, metricUnits: settings.useMetricUnits),
               const SizedBox(height: 20),
-              const Text('Hourly breakdown', style: TextStyle(fontWeight: FontWeight.w700)),
+              Text(l10n.hourlyBreakdown, style: const TextStyle(fontWeight: FontWeight.w700)),
               const SizedBox(height: 10),
               HourlyTable(day: day, metricUnits: settings.useMetricUnits),
             ],
@@ -146,6 +156,7 @@ class _DayDetailScreenState extends ConsumerState<DayDetailScreen> {
       ),
     );
   }
+
 }
 
 class _DaySelectorRow extends StatelessWidget {
@@ -157,6 +168,7 @@ class _DaySelectorRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return SizedBox(
       height: 40,
       child: ListView.separated(
@@ -166,7 +178,7 @@ class _DaySelectorRow extends StatelessWidget {
         itemBuilder: (context, i) {
           final selected = i == selectedIndex;
           return ChoiceChip(
-            label: Text(i == 0 ? 'Today' : DateFormat('EEE d').format(days[i].date)),
+            label: Text(i == 0 ? l10n.today : DateFormat('EEE d').format(days[i].date)),
             selected: selected,
             onSelected: (_) => onSelect(i),
             selectedColor: AppColors.accentCyan.withOpacity(0.25),

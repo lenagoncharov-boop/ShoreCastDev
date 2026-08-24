@@ -1,0 +1,69 @@
+{
+  "@@locale": "he",
+
+  "settingsTitle": "הגדרות",
+  "refreshNowTooltip": "רענן עכשיו",
+  "settingsTooltip": "הגדרות",
+  "noForecastData": "לא התקבל מידע תחזית.",
+  "hourlyBreakdown": "פירוט שעתי",
+  "sevenDayOutlook": "תחזית ל-7 ימים",
+  "today": "היום",
+
+  "swellLabel": "גלי גאות",
+  "windLabel": "רוח",
+  "windWavesSubvalue": "גלי רוח {value}",
+  "airWaterTemp": "טמפ׳ אוויר / מים",
+  "uvIndexLabel": "מדד UV",
+  "cloudCoverSubvalue": "עננות {value}%",
+
+  "avgWaveMax": "גל ממוצע {avg} · מקסימום {max}",
+  "bestWindow": "החלון הטוב ביותר: {time} · {label} ({score})",
+
+  "chooseCoast": "בחירת חוף",
+  "searchHint": "חיפוש עיר או חוף…",
+  "useMyLocation": "השתמש במיקום הנוכחי שלי",
+  "locationPermissionDenied": "הגישה למיקום נדחתה.",
+  "locationServicesOff": "שירותי המיקום כבויים.",
+  "myLocationName": "המיקום שלי",
+  "couldntGetLocation": "לא ניתן היה לקבל מיקום: {error}",
+  "searchFailed": "החיפוש נכשל: {error}",
+  "searchResults": "תוצאות חיפוש",
+  "savedCoasts": "חופים שמורים",
+  "suggestedCoasts": "חופים מומלצים",
+
+  "couldntLoadConditions": "לא ניתן היה לטעון את תנאי הים",
+  "retry": "נסה שוב",
+  "fetchingConditions": "טוען תנאי ים…",
+
+  "waveHeightCaption": "גובה גל · גלי גאות בתקופה של {period} שנ׳ מכיוון {direction}",
+
+  "waveHeightChartTitle": "גובה גל",
+  "windSpeedChartTitle": "מהירות רוח",
+  "waveShort": "גל",
+
+  "sunrise": "זריחה",
+  "sunset": "שקיעה",
+  "litPercent": "{percent}% מואר",
+
+  "tideWithTrend": "גאות ושפל · {trend}",
+  "tideCaption": "מגמה משוערת ממודל מפלס הים, לא טבלת גאות ושפל",
+
+  "unitsSection": "יחידות מידה",
+  "metricUnits": "יחידות מטריות",
+  "unitsMetricSubtitle": "מטרים, קמ״ש, °C",
+  "unitsImperialSubtitle": "רגל, קשר, °F",
+  "refreshSection": "רענון",
+  "autoRefreshInterval": "מרווח רענון אוטומטי",
+  "minutesShort": "{minutes} דק׳",
+  "hoursShort": "{hours} שע׳",
+  "widgetAutoRefresh": "רענון אוטומטי של הווידג׳ט במסך הבית",
+  "widgetAutoRefreshSubtitle": "משתמש במרווח שנבחר למעלה. אפשר גם ללחוץ בכל עת על סמל הרענון בווידג׳ט.",
+  "aboutDataSection": "על מקורות המידע",
+  "aboutDataIntro": "ShoreCast משתמש במקורות מידע פתוחים וחינמיים על מזג אוויר וים:",
+  "aboutDataSources": "• Open-Meteo Marine Weather API — גובה גלים, גלי גאות, גלי רוח, טמפרטורת מים\n• Open-Meteo Weather API — טמפרטורת אוויר, רוח, זריחה/שקיעה, מדד UV, עננות\n• Open-Meteo Geocoding API — חיפוש מיקומים לאורך החוף\n• שלב הירח מחושב מקומית לפי נוסחה אסטרונומית (ללא קריאה לשרת)",
+  "tideNoteTitle": "לגבי גאות ושפל",
+  "tideNoteBody": "כרגע אין מקור מידע חינמי, ללא מפתח API, לטבלאות גאות ושפל מדויקות בעולם. מגמת הגאות המוצגת (עולה/יורדת) מחושבת מהאות המשולב של מפלס הים של Open-Meteo — אינדיקציה איכותית טובה, אך לא זמן או גובה מדויקים מטבלת גאות ושפל. יש להתייחס לכך כאל הערכה בלבד.",
+  "languageSection": "שפה",
+  "languageSystem": "לפי המערכת",
+  "languageSystemSubtitle": "בהתאם לשפת הטלפון"
+}

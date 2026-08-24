@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   cupertino_icons: ^1.0.6
 
   # State management
@@ -20,8 +22,8 @@ dependencies:
   # Charts
   fl_chart: ^0.68.0
 
-  # Formatting
-  intl: ^0.19.0
+  # Formatting — version pinned by flutter_localizations in your Flutter SDK
+  intl: ^0.20.2
 
   # Local persistence (settings, saved locations, cached data)
   shared_preferences: ^2.2.3
@@ -45,6 +47,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
 
   assets:
     - assets/icon/

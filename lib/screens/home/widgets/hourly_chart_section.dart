@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../../core/utils/unit_converter.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../models/sea_condition_point.dart';
 
 /// Two stacked mini-charts: wave height (line/area) and wind speed
@@ -17,6 +18,7 @@ class HourlyChartSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (points.isEmpty) return const SizedBox.shrink();
+    final l10n = AppLocalizations.of(context)!;
 
     final maxWave = points.map((p) => p.waveHeight).reduce((a, b) => a > b ? a : b);
     final maxWind = points.map((p) => p.windSpeed).reduce((a, b) => a > b ? a : b);
@@ -31,7 +33,7 @@ class HourlyChartSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Wave height', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          Text(l10n.waveHeightChartTitle, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           SizedBox(
             height: 110,
@@ -105,7 +107,7 @@ class HourlyChartSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          const Text('Wind speed', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          Text(l10n.windSpeedChartTitle, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           SizedBox(
             height: 90,
