@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copy to: android/app/src/main/res/layout/activity_widget_configure.xml
+     Five metrics, one choice: a RadioGroup reads clearer here than a
+     dropdown. All options are visible at once, the selected one is
+     obviously highlighted, and there's no popup styling to get wrong.
+
+     WidgetConfigureActivity uses a Dialog theme (see the <activity> entry
+     in the manifest), so this renders as a compact floating card sized to
+     its own content instead of a full-screen page — hence wrap_content
+     height here, not match_parent. Tapping outside the card, or the system
+     back gesture, both close it (see setFinishOnTouchOutside in Kotlin). -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/configure_root"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/configure_background">
+
+    <TextView
+        android:id="@+id/configure_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose your reading"
+        android:textColor="#FFF3F8FF"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/configure_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="22dp"
+        android:text="Pick which one shows as the big number on your widget. Your choice is saved instantly."
+        android:textColor="#FFB9DCF7"
+        android:textSize="14sp" />
+
+    <RadioGroup
+        android:id="@+id/configure_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radio_wave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/radio_row_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="🌊  Wave height"
+            android:textColor="#FFF3F8FF"
+            android:textSize="16sp"
+            android:buttonTint="#3DD9F5" />
+
+        <RadioButton
+            android:id="@+id/radio_wind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/radio_row_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="💨  Wind speed"
+            android:textColor="#FFF3F8FF"
+            android:textSize="16sp"
+            android:buttonTint="#3DD9F5" />
+
+        <RadioButton
+            android:id="@+id/radio_tide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/radio_row_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="🌊  Tide trend"
+            android:textColor="#FFF3F8FF"
+            android:textSize="16sp"
+            android:buttonTint="#3DD9F5" />
+
+        <RadioButton
+            android:id="@+id/radio_air"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/radio_row_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="🌡️  Air temperature"
+            android:textColor="#FFF3F8FF"
+            android:textSize="16sp"
+            android:buttonTint="#3DD9F5" />
+
+        <RadioButton
+            android:id="@+id/radio_water"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/radio_row_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="💧  Water temperature"
+            android:textColor="#FFF3F8FF"
+            android:textSize="16sp"
+            android:buttonTint="#3DD9F5" />
+
+    </RadioGroup>
+
+</LinearLayout>

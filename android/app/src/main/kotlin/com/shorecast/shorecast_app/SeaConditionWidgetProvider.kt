@@ -8,15 +8,17 @@
 // widget's RemoteViews. All the strings arrive already-formatted (icons,
 // units, labels) from Dart — this file just places them.
 //
-// Each widget instance can have its own "headline" metric, chosen via
-// WidgetConfigureActivity (either automatically when the widget is first
-// added, or later via the widget's own gear icon). buildRemoteViews() is
-// the single shared renderer both places call, so the widget always
-// redraws consistently.
-//
-// Three tap targets: the gear icon reopens the configure screen for that
-// widget instance; the refresh icon re-runs the Dart background callback
-// to fetch fresh data; the rest of the widget opens the app.
+// Each widget instance can have its own "headline" metric, chosen three
+// ways, all landing in the same per-widget SharedPreferences entry:
+//   1) automatically, the moment the widget is added (android:configure
+//      -> WidgetConfigureActivity's spinner)
+//   2) later, via the gear icon -> WidgetConfigureActivity again
+//   3) fastest: tap directly on one of the four small metric rows on the
+//      widget itself, and it instantly swaps into the headline slot (no
+//      screen to open at all) — handled entirely in this file via
+//      ACTION_SET_HEADLINE, a broadcast this provider sends to itself.
+// buildRemoteViews() is the single shared renderer all three paths call,
+// so the widget always redraws consistently.
 
 package com.shorecast.shorecast_app
 
@@ -29,6 +31,7 @@ import android.net.Uri
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetBackgroundIntent
 import es.antonborri.home_widget.HomeWidgetLaunchIntent
+import es.antonborri.home_widget.HomeWidgetPlugin
 import es.antonborri.home_widget.HomeWidgetProvider
 
 class SeaConditionWidgetProvider : HomeWidgetProvider() {
@@ -45,6 +48,30 @@ class SeaConditionWidgetProvider : HomeWidgetProvider() {
         }
     }
 
+    // Handles the tap-a-metric-row-to-promote-it broadcast (see
+    // ACTION_SET_HEADLINE below) in addition to the normal AppWidget
+    // lifecycle broadcasts that HomeWidgetProvider/AppWidgetProvider
+    // already handle via onReceive -> onUpdate/onDeleted/etc.
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == ACTION_SET_HEADLINE) {
+            val widgetId = intent.getIntExtra(
+                AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
+            )
+            val metricId = intent.getStringExtra(EXTRA_METRIC_ID)
+            if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID &&
+                metricId != null && ALL_METRIC_IDS.contains(metricId)
+            ) {
+                savePrimaryMetric(context, widgetId, metricId)
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val widgetData = HomeWidgetPlugin.getData(context)
+                val views = buildRemoteViews(context, widgetId, widgetData)
+                appWidgetManager.updateAppWidget(widgetId, views)
+            }
+            return
+        }
+        super.onReceive(context, intent)
+    }
+
     companion object {
         /** The five metrics a user can pick as the widget's headline. Must stay
          *  in sync with WidgetConstants.metricIds in lib/core/constants.dart. */
@@ -52,6 +79,11 @@ class SeaConditionWidgetProvider : HomeWidgetProvider() {
 
         private const val CONFIG_PREFS_NAME = "ShoreCastWidgetConfig"
         private const val PRIMARY_METRIC_KEY_PREFIX = "primary_metric_"
+
+        // Self-addressed broadcast fired when the user taps one of the four
+        // small metric rows on the widget, promoting it to headline in place.
+        private const val ACTION_SET_HEADLINE = "com.shorecast.shorecast_app.ACTION_SET_HEADLINE"
+        private const val EXTRA_METRIC_ID = "metric_id"
 
         /** Reads the saved headline choice for one widget instance, defaulting
          *  to "wave" for a widget that was never configured (shouldn't normally
@@ -97,6 +129,9 @@ class SeaConditionWidgetProvider : HomeWidgetProvider() {
 
                 // The four metrics NOT chosen as the headline fill the small
                 // info grid, in a fixed left-to-right / top-to-bottom order.
+                // Each one is individually tappable: tapping a row promotes
+                // that metric straight to the headline slot, right there on
+                // the home screen, no screen to open.
                 val slotIds = intArrayOf(
                     R.id.widget_slot_1, R.id.widget_slot_2, R.id.widget_slot_3, R.id.widget_slot_4
                 )
@@ -108,6 +143,27 @@ class SeaConditionWidgetProvider : HomeWidgetProvider() {
                         "--"
                     }
                     setTextViewText(viewId, line)
+
+                    if (metricId != null) {
+                        val setHeadlineIntent = Intent(context, SeaConditionWidgetProvider::class.java).apply {
+                            action = ACTION_SET_HEADLINE
+                            // A unique data Uri (not just extras) is what makes each of
+                            // these PendingIntents distinct — Android treats two
+                            // PendingIntents with the same action/component/data as
+                            // "the same" regardless of extras, which would otherwise
+                            // make every row fire whichever intent was built last.
+                            data = Uri.parse("shorecast://headline/$widgetId/$metricId")
+                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+                            putExtra(EXTRA_METRIC_ID, metricId)
+                        }
+                        val setHeadlinePendingIntent = PendingIntent.getBroadcast(
+                            context,
+                            widgetId,
+                            setHeadlineIntent,
+                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                        )
+                        setOnClickPendingIntent(viewId, setHeadlinePendingIntent)
+                    }
                 }
 
                 setTextViewText(

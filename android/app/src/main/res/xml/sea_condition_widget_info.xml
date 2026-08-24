@@ -10,12 +10,20 @@
   value. Keep both: this one guarantees at least occasional refreshes
   even if WorkManager is ever killed by an aggressive OEM battery
   optimizer.
+
+  minHeight/targetCellHeight: the widget's actual content (header, big
+  number + rating pill, subtitle, 2x2 metric grid, "Updated" line) only
+  needs about 190dp. minHeight is that floor. targetCellHeight tells
+  Android-12+ launchers how many grid rows to allocate by default —
+  3 rows reserves noticeably more vertical space than the content uses,
+  leaving empty gradient below it; 2 rows is a much closer match.
 -->
+
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="250dp"
-    android:minHeight="200dp"
+    android:minHeight="190dp"
     android:targetCellWidth="4"
-    android:targetCellHeight="3"
+    android:targetCellHeight="2"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/sea_condition_widget"
     android:resizeMode="horizontal|vertical"
