@@ -131,49 +131,74 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: [
-                          GridView.count(
-                            crossAxisCount: 2,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            mainAxisSpacing: 10,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 2.6,
-                            children: [
-                              ConditionMetricCard(
-                                icon: Icons.waves_rounded,
-                                label: 'Swell',
-                                value:
-                                    '${current.swellHeight.toStringAsFixed(1)} m @ ${current.swellPeriod.toStringAsFixed(0)}s',
-                                subValue: 'Wind waves ${current.windWaveHeight.toStringAsFixed(1)} m',
-                                accent: AppColors.accentCyan,
-                              ),
-                              ConditionMetricCard(
-                                icon: Icons.air_rounded,
-                                label: 'Wind',
-                                value:
-                                    '${current.windSpeed.toStringAsFixed(0)} km/h · gusts ${current.windGusts.toStringAsFixed(0)}',
-                                accent: AppColors.accentBlue,
-                                trailing: CompassGauge(
-                                  directionDegrees: current.windDirection,
-                                  size: 30,
-                                  color: AppColors.accentBlue,
+                          // Two rows of two cards. Each row is wrapped in
+                          // IntrinsicHeight + stretch so both cards in it
+                          // share the taller card's height, and neither one
+                          // is squeezed into a fixed aspect ratio the way a
+                          // GridView.count cell would be -- that's what was
+                          // causing the "BOTTOM OVERFLOWED" warnings when a
+                          // card's text needed more room than a fixed-ratio
+                          // cell allowed.
+                          IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Expanded(
+                                  child: ConditionMetricCard(
+                                    icon: Icons.waves_rounded,
+                                    label: 'Swell',
+                                    value:
+                                        '${current.swellHeight.toStringAsFixed(1)} m @ ${current.swellPeriod.toStringAsFixed(0)}s',
+                                    subValue:
+                                        'Wind waves ${current.windWaveHeight.toStringAsFixed(1)} m',
+                                    accent: AppColors.accentCyan,
+                                  ),
                                 ),
-                              ),
-                              ConditionMetricCard(
-                                icon: Icons.thermostat_rounded,
-                                label: 'Air / Water temp',
-                                value:
-                                    '${current.airTemp.toStringAsFixed(0)}° / ${current.seaSurfaceTemp.toStringAsFixed(0)}°C',
-                                accent: AppColors.accentAmber,
-                              ),
-                              ConditionMetricCard(
-                                icon: Icons.wb_sunny_outlined,
-                                label: 'UV index',
-                                value: current.uvIndex.toStringAsFixed(1),
-                                subValue: 'Cloud cover ${current.cloudCover.toStringAsFixed(0)}%',
-                                accent: AppColors.accentAmber,
-                              ),
-                            ],
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: ConditionMetricCard(
+                                    icon: Icons.air_rounded,
+                                    label: 'Wind',
+                                    value:
+                                        '${current.windSpeed.toStringAsFixed(0)} km/h · gusts ${current.windGusts.toStringAsFixed(0)}',
+                                    accent: AppColors.accentBlue,
+                                    trailing: CompassGauge(
+                                      directionDegrees: current.windDirection,
+                                      size: 30,
+                                      color: AppColors.accentBlue,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          IntrinsicHeight(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Expanded(
+                                  child: ConditionMetricCard(
+                                    icon: Icons.thermostat_rounded,
+                                    label: 'Air / Water temp',
+                                    value:
+                                        '${current.airTemp.toStringAsFixed(0)}° / ${current.seaSurfaceTemp.toStringAsFixed(0)}°C',
+                                    accent: AppColors.accentAmber,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: ConditionMetricCard(
+                                    icon: Icons.wb_sunny_outlined,
+                                    label: 'UV index',
+                                    value: current.uvIndex.toStringAsFixed(1),
+                                    subValue:
+                                        'Cloud cover ${current.cloudCover.toStringAsFixed(0)}%',
+                                    accent: AppColors.accentAmber,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           const SizedBox(height: 10),
                           TideTrendCard(day: today, currentHourIndex: currentIndex),

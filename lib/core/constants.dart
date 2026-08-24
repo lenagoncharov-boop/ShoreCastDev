@@ -112,3 +112,14 @@ class DefaultLocation {
 }
 
 const List<int> refreshIntervalOptionsMinutes = [15, 30, 60, 120, 180];
+
+/// A human-readable build label shown in Settings so it's always obvious
+/// which round of changes is currently running — bumped by hand alongside
+/// each meaningful change (there's no automated build-number wiring here,
+/// to avoid pulling in an extra package just for this).
+class AppInfo {
+  AppInfo._();
+
+  static const String buildLabel = 'Build 2026-08-24.3';
+  static const String buildNote = 'Fixed card layout overflow, default location, widget picker wording';
+}

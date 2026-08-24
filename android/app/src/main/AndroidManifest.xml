@@ -35,6 +35,14 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Opt out of Flutter's newer Impeller renderer in favor of the
+             older Skia renderer. Some Android emulator GPU/driver
+             configurations (esp. software-backed OpenGLES on x86_64
+             emulators) show a blank/black screen with Impeller even
+             though the app process itself stays alive and healthy. -->
+        <meta-data
+            android:name="io.flutter.embedding.android.EnableImpeller"
+            android:value="false" />
             <receiver
             android:name=".SeaConditionWidgetProvider"
             android:exported="true">

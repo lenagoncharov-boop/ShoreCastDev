@@ -116,6 +116,27 @@ class SettingsScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 24),
+              Center(
+                child: Column(
+                  children: [
+                    Text(
+                      AppInfo.buildLabel,
+                      style: const TextStyle(
+                        color: AppColors.textFaint,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      AppInfo.buildNote,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: AppColors.textFaint, fontSize: 11),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
             ],
           ),
         ),
