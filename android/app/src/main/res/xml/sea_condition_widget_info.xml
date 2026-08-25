@@ -13,17 +13,17 @@
 
   minHeight/targetCellHeight: the widget's actual content (header, big
   number + rating pill, subtitle, 2x2 metric grid, "Updated" line) only
-  needs about 190dp. minHeight is that floor. targetCellHeight tells
-  Android-12+ launchers how many grid rows to allocate by default —
-  3 rows reserves noticeably more vertical space than the content uses,
-  leaving empty gradient below it; 2 rows is a much closer match.
+  needs about 140dp. minHeight is the floor, and targetCellHeight keeps
+  the default size compact without blocking manual resizing from the
+  home-screen launcher. Android launchers can still resize both dimensions
+  horizontally and vertically because resizeMode is enabled below.
 -->
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="250dp"
-    android:minHeight="190dp"
+    android:minHeight="140dp"
     android:targetCellWidth="4"
-    android:targetCellHeight="2"
+    android:targetCellHeight="1"
     android:updatePeriodMillis="1800000"
     android:initialLayout="@layout/sea_condition_widget"
     android:resizeMode="horizontal|vertical"

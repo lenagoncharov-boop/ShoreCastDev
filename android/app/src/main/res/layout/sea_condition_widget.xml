@@ -15,10 +15,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:gravity="center_vertical"
-    android:padding="14dp"
+    android:gravity="top"
+    android:paddingTop="8dp"
+    android:paddingBottom="4dp"
+    android:paddingLeft="14dp"
+    android:paddingRight="14dp"
     android:background="@drawable/widget_background">
 
     <!-- Header: location + settings (gear) + manual refresh -->
