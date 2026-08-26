@@ -97,8 +97,13 @@ class WidgetService {
         WidgetConstants.keyLocationLine, '📍 ${location.displayName}');
     await HomeWidget.saveWidgetData<String>(WidgetConstants.keyRatingLabel, ratingLabel(lang, rating.level));
     await HomeWidget.saveWidgetData<String>(WidgetConstants.keyRatingBucket, ratingBucket);
+    // Sunrise ("first light") folded into the same line as the refresh
+    // timestamp, to add useful info without a whole extra row on an
+    // already-tight widget.
     await HomeWidget.saveWidgetData<String>(
-        WidgetConstants.keyUpdatedLine, '${widgetUpdatedPrefix(lang)} ${DateFormat('HH:mm').format(now)}');
+        WidgetConstants.keyUpdatedLine,
+        '🌅 ${DateFormat('HH:mm').format(today.sunrise)} · '
+        '${widgetUpdatedPrefix(lang)} ${DateFormat('HH:mm').format(now)}');
     await HomeWidget.saveWidgetData<bool>(WidgetConstants.keyUnits, metric);
 
     Future<void> pushMetric(String id, String value, String line, String subtitle) async {

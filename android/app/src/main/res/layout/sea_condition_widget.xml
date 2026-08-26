@@ -11,6 +11,13 @@
   render time which metric goes in the big headline slot (per-widget
   choice, see WidgetConfigureActivity) and fills the remaining four
   metrics into the slots positionally.
+
+  Text that could overflow its slot uses autoSizeTextType="uniform"
+  (shrinks the font to fit) instead of ellipsize, so nothing is ever cut
+  off with "…". autoSizeTextType only takes effect on API 26+; on the
+  minSdk 21 floor it is simply ignored and the view falls back to its
+  fixed textSize, which is an acceptable (if occasionally tight) fallback
+  rather than a crash.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
@@ -37,7 +44,10 @@
             android:textSize="12sp"
             android:textStyle="bold"
             android:maxLines="1"
-            android:ellipsize="end"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeMaxTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
             android:text="📍 ShoreCast" />
 
         <ImageButton
@@ -107,7 +117,10 @@
         android:textColor="#B9DCF7"
         android:textSize="11sp"
         android:maxLines="1"
-        android:ellipsize="end"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="8sp"
+        android:autoSizeMaxTextSize="11sp"
+        android:autoSizeStepGranularity="1sp"
         android:text="--" />
 
     <!-- Metrics grid: whichever four metrics are NOT the chosen headline -->
@@ -124,6 +137,11 @@
             android:layout_weight="1"
             android:textColor="#F3F8FF"
             android:textSize="12sp"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="9sp"
+            android:autoSizeMaxTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
             android:text="💨 --" />
 
         <TextView
@@ -133,6 +151,11 @@
             android:layout_weight="1"
             android:textColor="#F3F8FF"
             android:textSize="12sp"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="9sp"
+            android:autoSizeMaxTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
             android:text="➡️ --" />
     </LinearLayout>
 
@@ -149,6 +172,11 @@
             android:layout_weight="1"
             android:textColor="#F3F8FF"
             android:textSize="12sp"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="9sp"
+            android:autoSizeMaxTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
             android:text="🌡️ --" />
 
         <TextView
@@ -158,6 +186,11 @@
             android:layout_weight="1"
             android:textColor="#F3F8FF"
             android:textSize="12sp"
+            android:maxLines="1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="9sp"
+            android:autoSizeMaxTextSize="12sp"
+            android:autoSizeStepGranularity="1sp"
             android:text="💧 --" />
     </LinearLayout>
 
@@ -168,6 +201,11 @@
         android:layout_marginTop="10dp"
         android:textColor="#89B4E0"
         android:textSize="9sp"
+        android:maxLines="1"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="7sp"
+        android:autoSizeMaxTextSize="9sp"
+        android:autoSizeStepGranularity="1sp"
         android:text="Updated --" />
 
 </LinearLayout>

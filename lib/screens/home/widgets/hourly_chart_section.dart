@@ -6,9 +6,10 @@ import '../../../core/utils/unit_converter.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/sea_condition_point.dart';
 
-/// Two stacked mini-charts: wave height (line/area) and wind speed
-/// (bars), sharing the same hourly x-axis. Mirrors the at-a-glance
-/// hourly trend graphs on surfline.com.
+/// Three stacked mini-charts sharing the same hourly x-axis, top to
+/// bottom: wind speed (line/area), wave height (bars), tide level
+/// (line/area). Mirrors the at-a-glance hourly trend graphs on
+/// surfline.com.
 class HourlyChartSection extends StatelessWidget {
   final List<SeaConditionPoint> points;
   final bool metricUnits;
@@ -31,6 +32,39 @@ class HourlyChartSection extends StatelessWidget {
     final tideRange = (maxTide - minTide).abs() < 0.05 ? 0.05 : (maxTide - minTide);
     final tidePadding = tideRange * 0.3;
 
+    // Shared Y-axis so the charts show a real value scale, not just the
+    // hourly time axis along the bottom.
+    // clamp()'s return type is inferred from its arguments; mixing an int
+    // literal with double.infinity (as windMaxY's lower bound did) makes it
+    // infer as num instead of double, which then fails to type-check
+    // against the double-typed maxY/leftAxis() parameters below. Being
+    // explicit here (declared type + toDouble()) avoids relying on that
+    // inference at all.
+    final double waveMaxY = (maxWave * 1.3).clamp(0.5, double.infinity).toDouble();
+    final double windMaxY = (maxWind * 1.3).clamp(5, double.infinity).toDouble();
+    final tideMinY = minTide - tidePadding;
+    final tideMaxY = maxTide + tidePadding;
+
+    AxisTitles leftAxis(double axisMax, double axisMin, String Function(double) format) {
+      return AxisTitles(
+        sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 38,
+          interval: ((axisMax - axisMin) / 3).clamp(0.01, double.infinity),
+          getTitlesWidget: (value, meta) {
+            if (value < axisMin - 0.001 || value > axisMax + 0.001) return const SizedBox.shrink();
+            return Padding(
+              padding: const EdgeInsets.only(right: 6),
+              child: Text(
+                format(value),
+                style: const TextStyle(fontSize: 9, color: AppColors.textFaint),
+              ),
+            );
+          },
+        ),
+      );
+    }
+
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
       decoration: BoxDecoration(
@@ -41,18 +75,22 @@ class HourlyChartSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.waveHeightChartTitle, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          Text(l10n.windSpeedChartTitle, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           SizedBox(
-            height: 110,
+            height: 90,
             child: LineChart(
               LineChartData(
                 minY: 0,
-                maxY: (maxWave * 1.3).clamp(0.5, double.infinity),
+                maxY: windMaxY,
                 gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
                 titlesData: FlTitlesData(
-                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles: leftAxis(
+                    windMaxY,
+                    0,
+                    (v) => UnitConverter.formatWindSpeed(v, metric: metricUnits).replaceAll(' ', ''),
+                  ),
                   rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   bottomTitles: AxisTitles(
@@ -82,7 +120,7 @@ class HourlyChartSection extends StatelessWidget {
                       final p = points[i];
                       return LineTooltipItem(
                         '${DateFormat('HH:mm').format(p.time)}\n'
-                        '${UnitConverter.formatHeight(p.waveHeight, metric: metricUnits)}',
+                        '${UnitConverter.formatWindSpeed(p.windSpeed, metric: metricUnits)}',
                         const TextStyle(color: AppColors.textPrimary, fontSize: 11),
                       );
                     }).toList(),
@@ -91,11 +129,11 @@ class HourlyChartSection extends StatelessWidget {
                 lineBarsData: [
                   LineChartBarData(
                     spots: [
-                      for (var i = 0; i < points.length; i++) FlSpot(i.toDouble(), points[i].waveHeight),
+                      for (var i = 0; i < points.length; i++) FlSpot(i.toDouble(), points[i].windSpeed),
                     ],
                     isCurved: true,
                     curveSmoothness: 0.25,
-                    color: AppColors.accentCyan,
+                    color: AppColors.accentBlue,
                     barWidth: 2.5,
                     dotData: const FlDotData(show: false),
                     belowBarData: BarAreaData(
@@ -104,8 +142,8 @@ class HourlyChartSection extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          AppColors.accentCyan.withOpacity(0.35),
-                          AppColors.accentCyan.withOpacity(0.02),
+                          AppColors.accentBlue.withOpacity(0.35),
+                          AppColors.accentBlue.withOpacity(0.02),
                         ],
                       ),
                     ),
@@ -115,18 +153,22 @@ class HourlyChartSection extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-          Text(l10n.windSpeedChartTitle, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
+          Text(l10n.waveHeightChartTitle, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700)),
           const SizedBox(height: 8),
           SizedBox(
-            height: 90,
+            height: 110,
             child: BarChart(
               BarChartData(
                 minY: 0,
-                maxY: (maxWind * 1.3).clamp(5, double.infinity),
+                maxY: waveMaxY,
                 gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
                 titlesData: FlTitlesData(
-                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles: leftAxis(
+                    waveMaxY,
+                    0,
+                    (v) => UnitConverter.formatHeight(v, metric: metricUnits).replaceAll(' ', ''),
+                  ),
                   rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   bottomTitles: AxisTitles(
@@ -152,8 +194,8 @@ class HourlyChartSection extends StatelessWidget {
                   for (var i = 0; i < points.length; i++)
                     BarChartGroupData(x: i, barRods: [
                       BarChartRodData(
-                        toY: points[i].windSpeed,
-                        color: AppColors.accentBlue,
+                        toY: points[i].waveHeight,
+                        color: AppColors.accentCyan,
                         width: (200 / points.length).clamp(2, 10),
                         borderRadius: BorderRadius.circular(2),
                       ),
@@ -174,12 +216,16 @@ class HourlyChartSection extends StatelessWidget {
             height: 90,
             child: LineChart(
               LineChartData(
-                minY: minTide - tidePadding,
-                maxY: maxTide + tidePadding,
+                minY: tideMinY,
+                maxY: tideMaxY,
                 gridData: const FlGridData(show: false),
                 borderData: FlBorderData(show: false),
                 titlesData: FlTitlesData(
-                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  leftTitles: leftAxis(
+                    tideMaxY,
+                    tideMinY,
+                    (v) => UnitConverter.formatHeight(v, metric: metricUnits, decimals: 1).replaceAll(' ', ''),
+                  ),
                   rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   bottomTitles: AxisTitles(

@@ -50,10 +50,16 @@ class ConditionMetricCard extends StatelessWidget {
                   style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
                 ),
                 const SizedBox(height: 2),
+                // Wrap onto a second line at full size first -- the card
+                // has the vertical room for it -- instead of shrinking the
+                // font down to fit everything on one line. (FittedBox would
+                // lay the text out unwrapped at its natural width before
+                // scaling, which is what made this shrink far more than
+                // necessary for something like "12 km/h · gusts 30".)
                 Text(
                   value,
+                  maxLines: 2,
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                  overflow: TextOverflow.ellipsis,
                 ),
                 if (subValue != null)
                   Text(

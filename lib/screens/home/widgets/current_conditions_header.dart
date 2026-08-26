@@ -38,10 +38,16 @@ class CurrentConditionsHeader extends StatelessWidget {
               const Icon(Icons.place_rounded, size: 16, color: AppColors.accentCyan),
               const SizedBox(width: 4),
               Expanded(
-                child: Text(
-                  location.displayName,
-                  style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
-                  overflow: TextOverflow.ellipsis,
+                // Shrink to fit instead of truncating with an ellipsis, so
+                // long location names always show in full.
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    location.displayName,
+                    maxLines: 1,
+                    style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                  ),
                 ),
               ),
             ],

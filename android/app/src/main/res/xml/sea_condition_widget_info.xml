@@ -17,11 +17,23 @@
   Android-12+ launchers how many grid rows to allocate by default —
   3 rows reserves noticeably more vertical space than the content uses,
   leaving empty gradient below it; 2 rows is a much closer match.
+
+  minResizeWidth/minResizeHeight and maxResizeWidth/maxResizeHeight:
+  some launchers only draw resize handles on a placed widget when these
+  are explicitly present (without them a few OEM launchers treat the
+  widget as fixed-size even though resizeMode allows both directions).
+  minResize* lets it shrink below the default footprint; maxResize*
+  (Android 12+/API 31, ignored on older versions) caps how large a
+  launcher will let it grow.
 -->
 
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:minWidth="250dp"
     android:minHeight="190dp"
+    android:minResizeWidth="180dp"
+    android:minResizeHeight="110dp"
+    android:maxResizeWidth="420dp"
+    android:maxResizeHeight="360dp"
     android:targetCellWidth="4"
     android:targetCellHeight="2"
     android:updatePeriodMillis="1800000"
