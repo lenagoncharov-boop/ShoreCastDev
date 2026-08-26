@@ -1,4 +1,4 @@
-package com.shorecast.shorecast_app
+package com.moresoft.shorecast
 
 import io.flutter.embedding.android.FlutterActivity
 

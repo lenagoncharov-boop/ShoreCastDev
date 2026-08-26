@@ -20,7 +20,7 @@
 // buildRemoteViews() is the single shared renderer all three paths call,
 // so the widget always redraws consistently.
 
-package com.shorecast.shorecast_app
+package com.moresoft.shorecast
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -82,7 +82,7 @@ class SeaConditionWidgetProvider : HomeWidgetProvider() {
 
         // Self-addressed broadcast fired when the user taps one of the four
         // small metric rows on the widget, promoting it to headline in place.
-        private const val ACTION_SET_HEADLINE = "com.shorecast.shorecast_app.ACTION_SET_HEADLINE"
+        private const val ACTION_SET_HEADLINE = "com.moresoft.shorecast.ACTION_SET_HEADLINE"
         private const val EXTRA_METRIC_ID = "metric_id"
 
         /** Reads the saved headline choice for one widget instance, defaulting

@@ -24,7 +24,7 @@
 // user backs out without tapping anything), and any real tap on an
 // option immediately confirms that one instead.
 
-package com.shorecast.shorecast_app
+package com.moresoft.shorecast
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager

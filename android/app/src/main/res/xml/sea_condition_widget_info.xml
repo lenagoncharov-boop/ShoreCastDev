@@ -41,4 +41,4 @@
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen"
     android:previewLayout="@layout/sea_condition_widget"
-    android:configure="com.shorecast.shorecast_app.WidgetConfigureActivity" />
+    android:configure="com.moresoft.shorecast.WidgetConfigureActivity" />
